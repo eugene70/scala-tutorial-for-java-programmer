@@ -23,7 +23,7 @@ object Day04 {
   }
 
   def ready2(input: String): Passports = {
-    val lines = input.split("\\n\\s*\\n")
+    val lines = input.split("""\n\s*\n""")
     val passports = lines
       .map(_.replace("\n", " "))
       .map(_.split(' ').map(_.trim).filter(_.nonEmpty)

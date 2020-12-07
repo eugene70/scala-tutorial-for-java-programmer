@@ -26,7 +26,11 @@ object Day05 {
   private def solve1(passes: Array[Int]): Int = passes.max
 
   private def solve2(passes: Array[Int]): Int =
-    passes.sorted.sliding(2).find(a => a(1) - a(0) == 2).map(_(0) + 1).getOrElse(0)
+    passes.sorted
+      .sliding(2)
+      .find(a => a(1) - a(0) == 2)
+      .map(_(0) + 1)
+      .getOrElse(0)
 
   private val testResult: Array[Int] = Array(567, 119, 820)
 
