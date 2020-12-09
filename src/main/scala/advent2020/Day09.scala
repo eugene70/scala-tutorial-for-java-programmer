@@ -12,21 +12,22 @@ object Day09 {
 
   def main(args: Array[String]): Unit = {
     val testData = time("testReady", () => ready(testInput))
-    time("testSolve1", () => solve1(5)(testData))
-    time("testSolve2", () => solve2(5)(testData))
+    time("testSolve1", () => solve1(5)(testData)) // should be 127
+    time("testSolve2", () => solve2(5)(testData)) // should be 62
 
     val data = time("ready", () => ready(input))
     time("solve1", () => solve1(25)(data))
     time("solve2", () => solve2(25)(data))
+    time("solve1_2", () => solve1_2(25)(data))
   }
 
   private def solve1(cnt: Int)(implicit data: InputType): Long = {
     data
       .sliding(cnt + 1)
       .map(a => (a.slice(0, a.length - 1), a.last))
-      .filterNot(a => isPreamble(a._1, a._2))
-      .collectFirst(a => a._2)
-      .getOrElse(0)
+      .find(a => !isPreamble(a._1, a._2))
+      .get
+      ._2
   }
 
   private def isPreamble(list: List[Long], num: Long): Boolean = {
@@ -38,6 +39,16 @@ object Day09 {
     false
   }
 
+  private def solve1_2(cnt: Int)(implicit data: InputType): Long = {
+    data
+      .sliding(cnt + 1)
+      .find({
+        case pre :+ num => !pre.combinations(2).exists(_.sum == num)
+      })
+      .get
+      .last
+  }
+
   private def solve2(cnt: Int)(implicit data: InputType): Long = {
     val r = solve1(cnt)
     var i = 0
@@ -45,9 +56,7 @@ object Day09 {
     do {
       val range = data.slice(i, j)
       val sum = range.sum
-      if (sum == r) {
-        return range.min + range.max
-      }
+      if (sum == r) return range.min + range.max
       if (sum < r) j += 1
       if (sum > r) i += 1
     } while(j < data.length)

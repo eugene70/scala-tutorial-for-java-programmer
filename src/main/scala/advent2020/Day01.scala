@@ -210,18 +210,33 @@ object Day01 {
     time("solve1_1", () => solve1_1())
     time("solve1_2", () => solve1_2())
     time("solve2", () => solve2())
+    time("solution(2)", () => solution(2))
+    time("solution(3)", () => solution(3))
+    time("solution2(2)", () => solution2(2))
+    time("solution2(3)", () => solution2(3))
   }
 
   def solve1_1(): Int = {
     IntStream.range(0, nums.length - 1)
-      .map(a => IntStream.range(a + 1, nums.length)
-        .filter(nums(a) + nums(_) == 2020)
-        .map(nums(a) * nums(_))
-        .findFirst()
-        .orElse(0))
+      .map(a =>
+        IntStream.range(a + 1, nums.length)
+          .filter(nums(a) + nums(_) == 2020)
+          .map(nums(a) * nums(_))
+          .findFirst()
+          .orElse(0)
+      )
       .filter(_ != 0)
       .findFirst()
       .orElse(0)
+  }
+
+  def solution(n: Int): Long = {
+    nums.combinations(n).find(_.sum == 2020).get.product
+  }
+
+  def solution2(n: Int): Long = {
+    val init = nums.combinations(n - 1).find(c => nums.contains(2020 - c.sum)).get
+    init.product * (2020 - init.sum)
   }
 
   def solve1_2(): Int = {
